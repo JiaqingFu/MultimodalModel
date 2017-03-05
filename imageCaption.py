@@ -15,7 +15,7 @@ from VGG import VGG_16
 
 def imageCaption():
     '''
-    :return:model with input shape (None,3,100,100)(None,max_caption_len) output shape(None, max_caption_len, vocab_size)
+    :return:model with input shape (None,3,100,100)(None,max_caption_len) output shape(None, vocab_size)
     you can call it with beam search
     #reference:https://keras.io/getting-started/sequential-model-guide/#examples
     '''
@@ -71,7 +71,7 @@ def imageCaption():
 def imageCaption2():
     '''
 
-    :return: model with input shape (None,3,224,224)(None,max_caption_len) output shape(None, max_caption_len,vocab_size)
+    :return: model with input shape (None,3,224,224)(None,max_caption_len) output shape(None,vocab_size)
     you can call it with beam search
     replace the image model of imageCaption() with VGG_16
     '''
@@ -113,9 +113,9 @@ def imageCaption2():
     return model
 def imageCaption3():
     '''
-    :return: model with input shape (None,3,224,224)(None,max_caption_len) output shape(None, max_caption_len+1,vocab_size)
+    :return: model with input shape (None,3,224,224)(None,max_caption_len-1) output shape(None, max_caption_len,vocab_size)
     the difference between imageCaption2 and imageCaption3:the image vector of imageCaption3 is repeat once and take one position
-    of RNN,so we get max_caption_len+1 in the output shape
+    of RNN,so we get max_caption_len-1 in the input shape;the output shape has time sequence max_caption_len
      '''
     max_caption_len = 21
     vocab_size = 10000
@@ -156,6 +156,6 @@ def imageCaption3():
     model.compile(loss='categorical_crossentropy', optimizer='rmsprop')
     return model
 if __name__ == "__main__":
-    imageCaption3()
-    imageCaption2()
-    imageCaption()
+    print imageCaption3().output_shape
+    print imageCaption2().output_shape
+    print imageCaption().output_shape
